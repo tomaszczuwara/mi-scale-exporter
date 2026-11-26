@@ -74,7 +74,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android36.0|AnyCPU'">
-	  <AndroidLinkTool>r8</AndroidLinkTool>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <UseSystemResourceKeys>false</UseSystemResourceKeys>
 	</PropertyGroup>
 
 	<ItemGroup>
