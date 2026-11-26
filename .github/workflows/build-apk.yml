@@ -24,6 +24,13 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      - name: Pin .NET 9 SDK via global.json
+        run: |
+          SDK_VER=$(dotnet --list-sdks | grep '^9\.0\.' | tail -n 1 | awk '{print $1}')
+          echo "Pinning SDK: $SDK_VER"
+          printf '{"sdk":{"version":"%s","rollForward":"latestFeature"}}\n' "$SDK_VER" > global.json
+          dotnet --version
+
       - name: Install MAUI Android workload
         run: dotnet workload install maui-android
 
@@ -33,6 +40,7 @@ jobs:
           -t:InstallAndroidDependencies
           -f net9.0-android36.0
           -p:AcceptAndroidSDKLicenses=True
+          -p:CheckEolWorkloads=false
 
       - name: Generate signing keystore
         run: >
@@ -48,6 +56,7 @@ jobs:
           dotnet publish src/MiScaleExporter.MAUI/MiScaleExporter.MAUI.csproj
           -f net9.0-android36.0
           -c Release
+          -p:CheckEolWorkloads=false
           -p:AndroidPackageFormat=apk
           -p:AndroidKeyStore=true
           -p:AndroidSigningKeyStore="${{ github.workspace }}/release.keystore"
